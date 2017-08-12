@@ -45,6 +45,27 @@ RSSEXPANDED: 条码类型常量，扩展式RSS组合码，数值为15*/
 			}; //扫描框的样式
 
 		},
+		/**
+		 * @param {Object} id 窗口ID
+		 */
+		getWebview:function(id)
+		{
+			
+			return plus.webview.getWebviewById(id);
+		},
+		openWebview:function(url,id)
+		{
+			
+			return plus.webview.open(url,id);
+		},
+		/**
+		 * 获取当前窗口
+		 */
+		currenWebview:function()
+		{
+			return plus.webview.currentWebview();
+			
+		},
 
 		/**
 		 * 连续扫描二维码、条码
@@ -85,6 +106,12 @@ if(consecutive)
 	setTimeout(function() {
 					scan.start();
 				}, time);
+	
+}
+else
+{
+	rap.currenWebview().close();
+
 	
 }
 				
@@ -294,15 +321,17 @@ if(consecutive)
 
 		},
 
+		
 		/**
-		 *像窗口发送数据
-		 * @param {Object} webview 目标窗口
-		 * @param {Object} eventType 自定义事件名
-		 * @param {Object} data JSON数据
+		 * 向目标窗口传递数据
+		 * @param {Object} sendWebview 发送窗口
+		 * @param {Object} receiveWebview 接收窗口
+		 * @param {Object} eventType 自定义事件类型
+		 * @param {Object} data 发送的JSON数据
 		 */
-		fire: function(webview, eventType, data) {
+		fire: function(sendWebview,receiveWebview, eventType, data) {
 			var data = JSON.stringify(data || {});
-			webview.evalJS(eventType + '("' + webview.id + '",' + data + ')');
+			receiveWebview.evalJS(eventType + '("' + sendWebview.id + '",' + data + ')');
 		},
 		jsonp: function(url, callbackFunc, data, type) //跨域请求
 		{
