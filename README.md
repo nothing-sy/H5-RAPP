@@ -18,6 +18,7 @@ rap.currenWebview()
 rap.getWebview(id)
 >id: String类型
 
+
 ####打开窗口
 rap.openWebview(url,id)
 >url :要打开页面的url,String类型
