@@ -16,7 +16,7 @@ rap.currenWebview()
 
 #### 根据窗口ID获取窗口对象
 rap.getWebview(id)
->id: String类型
+>id: String类型 ,返回对应ID的窗口对象
 
 
 #### 打开窗口
