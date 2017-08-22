@@ -73,9 +73,10 @@ RSSEXPANDED: 条码类型常量，扩展式RSS组合码，数值为15*/
 		 * @param {Object} consecutive 是否连续扫描 默认false
 		 * @param {Object} time 连续扫描间隔 默认1300毫秒
 		 */
-		plus_barcode: function(_callback, consecutive ,time) {
+		plus_barcode: function(_callback, consecutive ,time,deviceStyle) {
 			consecutive=arguments[1]? consecutive : false;//是否连续扫描,默认只扫描一次
 			time = arguments[2] ? time : 1300; //默认间隔1300毫秒
+			deviceStyle=arguments[3]?deviceStyle:{conserve: false,vibrate: false,sound: "default"};
 			scan = new plus.barcode.Barcode('bcid', filter, barcode_styles);
 			/*
 			 注明：该参数在真机调试的时候无效，需要打包生成APP后才有效
@@ -92,11 +93,7 @@ vibrate: (Boolean 类型 )成功扫描到条码数据时是否需要震动提醒
 sound: (String 类型 )成功扫描到条码数据时播放的提示音类型
 可取值： "none" - 不播放提示音； "default" - 播放默认提示音（5+引擎内置）。 默认值为"default"。
 			 * */
-			scan.start({
-				conserve: false,
-				vibrate: false,
-				sound: "default"
-			});
+			scan.start(deviceStyle);
 			scan.onmarked = function(type, result) {
 				//console.log(type);
 				_callback(result);
