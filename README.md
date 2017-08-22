@@ -54,8 +54,7 @@ $Fname=$_GET['callback'];
 echo $Fname.'('.data.')';//data为返回给前端的JSON字符串
 
 ```
-
-####获取8位随机数
+#### 获取8位随机数
 `rap.getUid();`
 
 #### 跨窗口传递参数
@@ -66,7 +65,7 @@ receiveWebview 接收窗口对象<br/>
 eventType 自定义监听函数名<br/>
 data 传递的JSON数据<br/>
 
-####跨窗口接收数据
+#### 跨窗口接收数据
 `rap.receive(eventType, callback)`
 >eventType 自定义监听函数名，必须与rap.fire中的eventType保持一致。<br/>
 callback[sendWebviewid,data] sendWebviewid 为发送源的窗口ID，data是传过来的JSON数据<br/>
