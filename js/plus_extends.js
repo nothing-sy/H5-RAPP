@@ -175,7 +175,7 @@ else
 						plus.nativeUI.showWaiting('签收中...');
 						var cur_user = JSON.parse(localStorage.getItem('user_login')).user;
 						//console.log(cur_user);
-						ks.jsonp(conf.Fcheck_waybill, 'update_statu', {
+						rap.jsonp(conf.Fcheck_waybill, 'update_statu', {
 							cact: 'update',
 							yd_no: vm.yd_no,
 							user_account: cur_user,
@@ -251,7 +251,7 @@ else
 						plus.nativeUI.showWaiting('登记中...');
 						var cur_user = JSON.parse(localStorage.getItem('user_login')).user;
 						//console.log(cur_user);
-						ks.jsonp(conf.Fexception_register, 'insert_exception', {
+						rap.jsonp(conf.Fexception_register, 'insert_exception', {
 							cact: 'insert',
 							yid: vm.yid,
 							dp_qty: vm.exception_qty,
@@ -392,7 +392,7 @@ else
 			dtask.start();
 		}
 
-		// window.ks结束		
+		// window.rap结束		
 	}
 
 })()
