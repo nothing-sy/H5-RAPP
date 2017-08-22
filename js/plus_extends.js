@@ -333,15 +333,21 @@ else
 			var data = JSON.stringify(data || {});
 			receiveWebview.evalJS(eventType + '("' + sendWebview.id + '",' + data + ')');
 		},
-		jsonp: function(url, callbackFunc, data, type) //跨域请求
+		/**
+		 * @param {Object} url 请求路径
+		 * @param {Object} callbackFunc 回调函数名
+		 * @param {Object} data JSON数据
+		 * @param {Object} type 
+		 */
+		jsonp: function(url, callbackFunc, data) //跨域请求
 		{
 
 			var data = arguments[2] ? arguments[2] : ''; //默认参数为空
-			var type = arguments[3] ? arguments[3] : 'get'; //默认类型为GET
+			//var type = arguments[3] ? arguments[3] : 'get'; //默认类型为GET
 
 			if(url != '' && callbackFunc != '') {
 				$.ajax({
-					type: type,
+					type: 'get',
 					dataType: 'jsonp',
 					url: url,
 					jsonp: "callback",
@@ -356,8 +362,6 @@ else
 					error: function() {
 
 						console.log('跨域请求失败');
-
-						//mui.alert('跨域请求失败')
 
 					}
 				});
