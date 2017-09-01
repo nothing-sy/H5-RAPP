@@ -26,15 +26,22 @@ id：窗口的ID，String类型<br/>
 #### 打开扫描页面
 `rap.plus_barcode(callback,consecutive,time,deviceStyle)`<br/>
 >callback[res]：回调函数，回调函数应该包括res,即扫描结果<br/>
-consecutive: boolean类型，是否开启连续扫描，默认值为false<br/>
-time:int类型，开启连续扫描时候的扫描间隔时间<br/>
-deviceStyle：JSON类型，扫描时候设备的属性和行为，conserve(boolean类型)，是否保存成功扫描到的条码数据时的截图，默认值为false<br/>
+>consecutive: boolean类型，是否开启连续扫描，默认值为false<br/>
+>time:int类型，开启连续扫描时候的扫描间隔时间<br/>
 
-filename：String类型，保存成功扫描到条码数据时的图片路径<br/>
 
-vibrate: Boolean类型，扫描成功时是否震动提醒，默认为FALSE<br/>
+>deviceStyle JSON数据
+ 注明：该参数在真机调试的时候无效，需要打包生成APP后才有效<br/>
+ 属性：<br/>
+>conserve:(Boolean 类型 )是否保存成功扫描到的条码数据时的截图
+如果设置为true则在成功扫描到条码数据时将图片保存，并通过onmarked回调函数的file参数返回保存文件的路径。默认值为false，不保存图片。<br/>
+<br/>filename: (String 类型 )保存成功扫描到的条码数据时的图片路径<br/><br/>
+可通过此参数设置保存截图的路径或名称，如果设置图片文件名称则必须指定文件的后缀名（必须是.png），否则认为是指定目录，文件名称则自动生成。<br/>
+<br/>vibrate: (Boolean 类型 )成功扫描到条码数据时是否需要震动提醒<br/><br/>
+如果设置为true则在成功扫描到条码数据时震动设备，false则不震动。默认值为true。<br/>
+<br/>sound: (String 类型 )成功扫描到条码数据时播放的提示音类型<br/><br/>
+可取值： "none" - 不播放提示音； "default" - 播放默认提示音（5+引擎内置）。 默认值为"default"。<br/>
 
-sound ：String 类型，扫描成功时的声音，默认为default 播放提示音，none -不播放:<br/>
 
 #### 跨域处理
 `rap.jsonp(url,callbackFun,data);`<br/>

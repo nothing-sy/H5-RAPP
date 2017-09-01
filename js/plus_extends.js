@@ -78,21 +78,7 @@ RSSEXPANDED: 条码类型常量，扩展式RSS组合码，数值为15*/
 			time = arguments[2] ? time : 1300; //默认间隔1300毫秒
 			deviceStyle=arguments[3]?deviceStyle:{conserve: false,vibrate: false,sound: "default"};
 			scan = new plus.barcode.Barcode('bcid', filter, barcode_styles);
-			/*
-			 注明：该参数在真机调试的时候无效，需要打包生成APP后才有效
-			 属性：
-conserve: (Boolean 类型 )是否保存成功扫描到的条码数据时的截图
-如果设置为true则在成功扫描到条码数据时将图片保存，并通过onmarked回调函数的file参数返回保存文件的路径。默认值为false，不保存图片。
-
-filename: (String 类型 )保存成功扫描到的条码数据时的图片路径
-可通过此参数设置保存截图的路径或名称，如果设置图片文件名称则必须指定文件的后缀名（必须是.png），否则认为是指定目录，文件名称则自动生成。
-
-vibrate: (Boolean 类型 )成功扫描到条码数据时是否需要震动提醒
-如果设置为true则在成功扫描到条码数据时震动设备，false则不震动。默认值为true。
-
-sound: (String 类型 )成功扫描到条码数据时播放的提示音类型
-可取值： "none" - 不播放提示音； "default" - 播放默认提示音（5+引擎内置）。 默认值为"default"。
-			 * */
+		
 			scan.start(deviceStyle);
 			scan.onmarked = function(type, result) {
 				//console.log(type);
