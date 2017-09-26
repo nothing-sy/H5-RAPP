@@ -8,8 +8,8 @@
 
 (function() {
 	//摄像头的全局参数，方便如扫描接口，拍摄接口等需要用到摄像头的接口调用
-	var scan, filter, barcode_styles, camera; //分别是：条码扫描控件对象，条码识别对象的识别类型（包括二维码和各种类型条码），条码扫描控件对象的样式（无效），摄像头对象
-	
+	var scan, filter, barcode_styles, camera, xhr; //分别是：条码扫描控件对象，条码识别对象的识别类型（包括二维码和各种类型条码），条码扫描控件对象的样式（无效），摄像头对象
+
 	//H5-(rap)P,为了方便简写，使用rap 作为全局变量,本身我也挺喜欢说唱的
 	rap = {
 		//
@@ -18,26 +18,26 @@
 		 */
 		init: function() {
 			scan = null; //条码识别对象
-			filter = [plus.barcode.CODE128, plus.barcode.QR]; 
-//根据个人需求初始化相关类型，类型过多，控件识别时间会明细增加，识别率降低，建议只初始化自己需要的几种参数
-/*条码识别对象的识别类型,
-常量：
-QR: 条码类型常量，QR二维码，数值为0
-EAN13: 条码类型常量，EAN一维条形码码标准版，数值为1
-EAN8: 条码类型常量，ENA一维条形码简版，数值为2
-AZTEC: 条码类型常量，Aztec二维码，数值为3
-DATAMATRIX: 条码类型常量，Data Matrix二维码，数值为4
-UPCA: 条码类型常量，UPC码标准版，数值为5
-UPCE: 条码类型常量，UPC码缩短版，数值为6
-CODABAR: 条码类型常量，Codabar码，数值为7
-CODE39: 条码类型常量，Code39一维条形码，数值为8
-CODE93: 条码类型常量，Code93码，数值为9
-CODE128: 条码类型常量，Code128码，数值为10
-ITF: 条码类型常量，ITF码，数值为11
-MAXICODE: 条码类型常量，MaxiCode二维码，数值为12
-PDF417: 条码类型常量，PDF 417码，数值为13
-RSS14: 条码类型常量，RSS 14组合码，数值为14
-RSSEXPANDED: 条码类型常量，扩展式RSS组合码，数值为15*/
+			filter = [plus.barcode.CODE128, plus.barcode.QR];
+			//根据个人需求初始化相关类型，类型过多，控件识别时间会明细增加，识别率降低，建议只初始化自己需要的几种参数
+			/*条码识别对象的识别类型,
+			常量：
+			QR: 条码类型常量，QR二维码，数值为0
+			EAN13: 条码类型常量，EAN一维条形码码标准版，数值为1
+			EAN8: 条码类型常量，ENA一维条形码简版，数值为2
+			AZTEC: 条码类型常量，Aztec二维码，数值为3
+			DATAMATRIX: 条码类型常量，Data Matrix二维码，数值为4
+			UPCA: 条码类型常量，UPC码标准版，数值为5
+			UPCE: 条码类型常量，UPC码缩短版，数值为6
+			CODABAR: 条码类型常量，Codabar码，数值为7
+			CODE39: 条码类型常量，Code39一维条形码，数值为8
+			CODE93: 条码类型常量，Code93码，数值为9
+			CODE128: 条码类型常量，Code128码，数值为10
+			ITF: 条码类型常量，ITF码，数值为11
+			MAXICODE: 条码类型常量，MaxiCode二维码，数值为12
+			PDF417: 条码类型常量，PDF 417码，数值为13
+			RSS14: 条码类型常量，RSS 14组合码，数值为14
+			RSSEXPANDED: 条码类型常量，扩展式RSS组合码，数值为15*/
 			barcode_styles = {
 				"frameColor": 'blue',
 				"scanbarColor": 'blue',
@@ -48,23 +48,20 @@ RSSEXPANDED: 条码类型常量，扩展式RSS组合码，数值为15*/
 		/**
 		 * @param {Object} id 窗口ID
 		 */
-		getWebview:function(id)
-		{
-			
+		getWebview: function(id) {
+
 			return plus.webview.getWebviewById(id);
 		},
-		openWebview:function(url,id)
-		{
-			
-			return plus.webview.open(url,id);
+		openWebview: function(url, id) {
+
+			return plus.webview.open(url, id);
 		},
 		/**
 		 * 获取当前窗口
 		 */
-		currenWebview:function()
-		{
+		currenWebview: function() {
 			return plus.webview.currentWebview();
-			
+
 		},
 
 		/**
@@ -73,49 +70,34 @@ RSSEXPANDED: 条码类型常量，扩展式RSS组合码，数值为15*/
 		 * @param {Object} consecutive 是否连续扫描 默认false
 		 * @param {Object} time 连续扫描间隔 默认1300毫秒
 		 */
-		plus_barcode: function(_callback, consecutive ,time,deviceStyle) {
-			consecutive=arguments[1]? consecutive : false;//是否连续扫描,默认只扫描一次
+		plus_barcode: function(_callback, consecutive, time, deviceStyle) {
+			consecutive = arguments[1] ? consecutive : false; //是否连续扫描,默认只扫描一次
 			time = arguments[2] ? time : 1300; //默认间隔1300毫秒
-			deviceStyle=arguments[3]?deviceStyle:{conserve: false,vibrate: false,sound: "default"};
+			deviceStyle = arguments[3] ? deviceStyle : {
+				conserve: false,
+				vibrate: false,
+				sound: "default"
+			};
 			scan = new plus.barcode.Barcode('bcid', filter, barcode_styles);
-			/*
-			 注明：该参数在真机调试的时候无效，需要打包生成APP后才有效
-			 属性：
-conserve: (Boolean 类型 )是否保存成功扫描到的条码数据时的截图
-如果设置为true则在成功扫描到条码数据时将图片保存，并通过onmarked回调函数的file参数返回保存文件的路径。默认值为false，不保存图片。
 
-filename: (String 类型 )保存成功扫描到的条码数据时的图片路径
-可通过此参数设置保存截图的路径或名称，如果设置图片文件名称则必须指定文件的后缀名（必须是.png），否则认为是指定目录，文件名称则自动生成。
-
-vibrate: (Boolean 类型 )成功扫描到条码数据时是否需要震动提醒
-如果设置为true则在成功扫描到条码数据时震动设备，false则不震动。默认值为true。
-
-sound: (String 类型 )成功扫描到条码数据时播放的提示音类型
-可取值： "none" - 不播放提示音； "default" - 播放默认提示音（5+引擎内置）。 默认值为"default"。
-			 * */
 			scan.start(deviceStyle);
 			scan.onmarked = function(type, result) {
 				//console.log(type);
 				_callback(result);
-if(consecutive)
-{
-	
-	setTimeout(function() {
-					scan.start();
-				}, time);
-	
-}
-else
-{
-	rap.currenWebview().close();
+				if(consecutive) {
 
-	
-}
-				
+					setTimeout(function() {
+						scan.start();
+					}, time);
+
+				} else {
+					rap.currenWebview().close();
+
+				}
 
 			};
 		},
-		
+
 		//拍照并保存到系统相册
 		plus_camera_save: function(_callback, _index) {
 			//index:1 主摄像头，2前置摄像头
@@ -175,7 +157,7 @@ else
 						plus.nativeUI.showWaiting('签收中...');
 						var cur_user = JSON.parse(localStorage.getItem('user_login')).user;
 						//console.log(cur_user);
-						ks.jsonp(conf.Fcheck_waybill, 'update_statu', {
+						rap.jsonp(conf.Fcheck_waybill, 'update_statu', {
 							cact: 'update',
 							yd_no: vm.yd_no,
 							user_account: cur_user,
@@ -251,7 +233,7 @@ else
 						plus.nativeUI.showWaiting('登记中...');
 						var cur_user = JSON.parse(localStorage.getItem('user_login')).user;
 						//console.log(cur_user);
-						ks.jsonp(conf.Fexception_register, 'insert_exception', {
+						rap.jsonp(conf.Fexception_register, 'insert_exception', {
 							cact: 'insert',
 							yid: vm.yid,
 							dp_qty: vm.exception_qty,
@@ -318,7 +300,6 @@ else
 
 		},
 
-		
 		/**
 		 * 向目标窗口传递数据
 		 * @param {Object} sendWebview 发送窗口
@@ -326,19 +307,25 @@ else
 		 * @param {Object} eventType 自定义事件类型
 		 * @param {Object} data 发送的JSON数据
 		 */
-		fire: function(sendWebview,receiveWebview, eventType, data) {
+		fire: function(sendWebview, receiveWebview, eventType, data) {
 			var data = JSON.stringify(data || {});
 			receiveWebview.evalJS(eventType + '("' + sendWebview.id + '",' + data + ')');
 		},
-		jsonp: function(url, callbackFunc, data, type) //跨域请求
+		/**
+		 * @param {Object} url 请求路径
+		 * @param {Object} callbackFunc 回调函数名
+		 * @param {Object} data JSON数据
+		 * @param {Object} type 
+		 */
+		jsonp: function(url, callbackFunc, data) //跨域请求
 		{
 
 			var data = arguments[2] ? arguments[2] : ''; //默认参数为空
-			var type = arguments[3] ? arguments[3] : 'get'; //默认类型为GET
+			//var type = arguments[3] ? arguments[3] : 'get'; //默认类型为GET
 
 			if(url != '' && callbackFunc != '') {
 				$.ajax({
-					type: type,
+					type: 'get',
 					dataType: 'jsonp',
 					url: url,
 					jsonp: "callback",
@@ -353,8 +340,6 @@ else
 					error: function() {
 
 						console.log('跨域请求失败');
-
-						//mui.alert('跨域请求失败')
 
 					}
 				});
@@ -386,9 +371,47 @@ else
 			});
 			//dtask.addEventListener( "statechanged", onStateChanged, false );
 			dtask.start();
+		},
+		/**
+		 * @param {Object} type 请求类型，只支持 GET和POST,默认GET方法
+		 * @param {Object} url  请求地址 
+		 * @param {Object} data  请求数据，格式为 "A=XX&B=xx"
+		 * @param {Object} callback 回调函数,参数res ，请求返回的JSON数据
+		 */
+		request: function(url, data, callback, type) {
+			xhr = new plus.net.XMLHttpRequest();
+			type = arguments[3] ? arguments[3] : 'GET';
+			data = arguments[1] ? arguments[1] : '';
+			xhr.onreadystatechange = function() {
+				switch(xhr.readyState) {
+					case 4:
+						if(xhr.status == 200) {
+							callback(JSON.parse(xhr.responseText));
+
+						} else {
+							alert("xhr请求失败：" + xhr.readyState);
+						}
+						break;
+
+				}
+			}
+			switch(type.toUpperCase()) {
+				case 'GET':
+					xhr.open(type, url + '?' + data);
+					xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+					xhr.send();
+					break;
+
+				case 'POST':
+					xhr.open(type, url);
+					xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+					xhr.send(data);
+					break;
+			}
+
 		}
 
-		// window.ks结束		
+		// window.rap结束		
 	}
 
 })()
