@@ -63,6 +63,22 @@
 			return plus.webview.currentWebview();
 
 		},
+		/**
+		 * @param {Object} key 存储的键
+		 * @param {Object} val 对应的值
+		 */
+		setItem:function(key,val){
+			
+			plus.storage.setItem(key,val);
+			
+		},
+		/**
+		 * @param {Object} key 获取key对应的值
+		 */
+		getItem:function(key){
+			
+			return plus.storage.getItem(key);
+		},
 
 		/**
 		 * 连续扫描二维码、条码
