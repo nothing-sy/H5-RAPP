@@ -79,6 +79,36 @@
 			
 			return plus.storage.getItem(key);
 		},
+		removeItem:function(key)
+		{
+			plus.storage.removeItem(key);
+			
+		},
+		/**
+		 * 监听返回键，连续双击则退出程序
+		 * @param {Object} pri 存储时间的变量，需要是全局的或持续存在内存当中的
+		 * @param {Object} time 两次点击的时间间隔，时间为毫秒
+		 */
+		backButtonDouble:function(pri,time)
+		{
+			plus.key.addEventListener("backbutton",function(){
+		if(pri == null) {
+							mui.toast('再次点击退出程序');
+							pri = new Date();
+						} else {
+							newDate = new Date();
+							if(newDate - pri <= time) {
+								plus.runtime.quit();
+							} else {
+								pri = null;
+								mui.toast('再次点击退出程序');
+
+							}
+
+						}
+	});
+			
+		},
 
 		/**
 		 * 连续扫描二维码、条码
