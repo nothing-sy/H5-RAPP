@@ -52,9 +52,9 @@
 
 			return plus.webview.getWebviewById(id);
 		},
-		openWebview: function(url, id) {
-
-			return plus.webview.open(url, id);
+		openWebview: function(url, id,ani) {
+			
+			return plus.webview.open(url, id,{},ani);
 		},
 		/**
 		 * 获取当前窗口
