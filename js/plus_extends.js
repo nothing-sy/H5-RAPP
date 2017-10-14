@@ -57,6 +57,35 @@
 			return plus.webview.open(url, id,{},ani);
 		},
 		/**
+		 * 打开窗口，如果窗口已经存在，不再创建直接显示，如果不存在，创建并打开
+		 * @param {Object} id
+		 */
+		open:function(id){
+			
+			//console.log(JSON.stringify());
+			var arr=plus.webview.all();
+			var hasWebview=false;
+		$.each(arr, function(i) {
+			if(arr[i].id==id)
+			{
+				//如果存在的话，则直接打开
+				//console.log('已经存在的窗口');
+				hasWebview=true;
+				plus.webview.show(id);
+				
+			}
+			
+		});
+			
+		if(!hasWebview)
+		{
+			
+			//plus.webview.open()
+			this.openWebview(id,id);
+		}
+			
+		},
+		/**
 		 * 获取当前窗口
 		 */
 		currenWebview: function() {
