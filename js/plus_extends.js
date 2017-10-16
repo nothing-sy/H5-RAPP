@@ -86,6 +86,16 @@
 			
 		},
 		/**
+		 * 监听菜单按钮，并打开某个窗口
+		 * @param {Object} id 窗口标识ID
+		 */
+		menubuttonTap:function(id){
+			plus.key.addEventListener('menubutton',function(){
+				//console.log('按键了');
+				rap.open(id);				
+			});	
+		},
+		/**
 		 * 获取当前窗口
 		 */
 		currenWebview: function() {
